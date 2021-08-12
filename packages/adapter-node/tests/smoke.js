@@ -46,4 +46,20 @@ test('responses with the rendered status code', async () => {
 	server.server.close();
 });
 
+test('route with umlaut returns page', async () => {
+	const server = await startServer({
+		render: (incoming) => {
+			if (incoming.path === '/über-uns') {
+				return {
+					status: 200,
+					body: incoming.path
+				};
+			}
+		}
+	});
+	const res = await fetch(`http://localhost:${PORT}/über-uns`);
+	assert.ok(res.ok);
+	server.server.close();
+});
+
 test.run();
